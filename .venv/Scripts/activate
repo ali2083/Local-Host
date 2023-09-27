@@ -38,6 +38,8 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
+# =============>> Edit this  path  to <<=============
+# =============>> run the application <<=============
 VIRTUAL_ENV="F:\projects\Local Host\.venv"
 export VIRTUAL_ENV
 

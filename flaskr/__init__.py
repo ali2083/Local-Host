@@ -29,6 +29,14 @@ def create_app(test_config=None):
 
     from . import index
     app.register_blueprint(index.bp)
-    app.add_url_rule('/', endpoint='index')
+
+    # from . import share
+    # app.register_blueprint(share.bp)
+
+    # from . import chatbot
+    # app.register_blueprint(chatbot.bp)
+
+    # from . import stream
+    # app.register_blueprint(stream.bp)
     
     return app

@@ -1,1 +1,30 @@
-base
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="script" href="static/script.js" />
+        <link rel="stylesheet" href="static/style.css" />
+        <title>{% block title %}{% endblock %} - LocalHost</title>
+        {% block head %}
+        {% endblock %}
+   </head>
+   <body>
+    <header>
+        <h1>LocalHost</h1>
+        <nav>
+            <a href="/share">Share</a>
+            <a href="/chatbox">ChatBox</a>
+            <a href="/stream">Stream</a>
+        </nav>
+    </header>
+    <main>
+        <div>
+            {% block main %}
+            {% endblock %}
+        </div>
+    </main>
+    <footer>
+        <p>Made by <strong>Alireza Moghaddam</strong></p>
+        <p><b>Email:</b> alireza1383moghaddam@gmail.com</p>
+    </footer>
+   </body>
+</html>

@@ -1,1 +1,9 @@
-apology
+{% extends "base.html" %}
+{% block title %}Apology{% endblock %}
+{% block main %}
+    <h1>Error</h1>
+    <p>
+        <strong>{{ error }}</strong>
+        {{ msg }}
+    </p>
+{% endblock %}

@@ -35,7 +35,28 @@ footer {
     text-align: center;
     font-size: 18px;
 }
-
 main {
-    margin: 10% 5% 10% 5%;
+    margin:5%;
+}
+table {
+    padding: 2px;
+}
+thead {
+    background-color: #454545;
+    color: wheat;
+    font-size: larger;
+}
+tbody {
+    font-size: medium;
+}
+.odd {
+    background-color: #f2f2f2;
+}
+div.share {
+    justify-content: center;
+}
+td a {
+    border-radius: 5px;
+    border-bottom: #3f3f3f 0.5px;
+    background-color: #f2f2f2;
 }

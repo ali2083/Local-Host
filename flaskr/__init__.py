@@ -7,8 +7,9 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'database.sqlite'),
+        SECRET_KEY = 'dev',
+        DATABASE = os.path.join(app.instance_path, 'database.sqlite'),
+        UPLOAD_FOLDER = os.path.join(app.instance_path, "files")
     )
 
     if test_config is None:
@@ -19,10 +20,17 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+        try:
+            os.makedirs(app.config["UPLOAD_FOLDER"])
+        except OSError:
+            print("making upload folder failed")
+    if not os.path.exists(app.instance_path):
+        try:
+            os.makedirs(app.instance_path)
+        except OSError:
+            print("making instance folder failed")
+        
 
     from . import db
     db.init_app(app)
@@ -30,8 +38,8 @@ def create_app(test_config=None):
     from . import index
     app.register_blueprint(index.bp)
 
-    # from . import share
-    # app.register_blueprint(share.bp)
+    from . import share
+    app.register_blueprint(share.bp)
 
     # from . import chatbot
     # app.register_blueprint(chatbot.bp)

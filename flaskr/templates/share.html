@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Sharing Center{% endblock %}
+{% block main %}
+    <h3>Sharing Center</h3>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+    </form>
+    <div class="share">
+        <table>
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>type</th>
+                    <th>date</th>
+                    <th>lengh</th>
+                    <th>upload by</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td class="odd">{{ file["name"] }}</td>
+                    <td>{{ file.type }}</td>
+                    <td class="odd">{{ file.date }}</td>
+                    <td>{{ file.lengh }}</td>
+                    <td class="odd">{{ file.sender }}</td>
+                    <td><a href="share/download/{{ file.name }}">Download</a></td>
+                    <td><a href="share/delete/{{ file.name }}">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

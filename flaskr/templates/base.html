@@ -11,7 +11,6 @@
     <header>
         <h1>LocalHost</h1>
         <nav>
-            <a href="/admin">Admin</a>
             <a href="/index">Index</a>
             <a href="/share">Share</a>
             <a href="/chatbox">ChatBox</a>
@@ -27,6 +26,15 @@
     <footer>
         <p>Made by <strong>Alireza Moghaddam</strong></p>
         <p><b>Email:</b> alireza1383moghaddam@gmail.com</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </footer>
    </body>
 </html>

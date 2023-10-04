@@ -6,14 +6,18 @@
         <input type=file name=file>
         <input type=submit value=Upload>
     </form>
+    {% if error %}
+      <p class=error><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
     <div class="share">
         <table>
             <thead>
                 <tr>
                     <th>name</th>
+                    <th>size - KB</th>
                     <th>type</th>
-                    <th>date</th>
                     <th>lengh</th>
+                    <th>date</th>
                     <th>upload by</th>
                     <th></th>
                     <th></th>
@@ -22,13 +26,14 @@
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td class="odd">{{ file["name"] }}</td>
-                    <td>{{ file.type }}</td>
-                    <td class="odd">{{ file.date }}</td>
+                    <td class="odd">{{ file.name }}</td>
+                    <td>{{ file.size }}</td>
+                    <td class="odd">{{ file.type }}</td>
                     <td>{{ file.lengh }}</td>
-                    <td class="odd">{{ file.sender }}</td>
-                    <td><a href="share/download/{{ file.name }}">Download</a></td>
-                    <td><a href="share/delete/{{ file.name }}">Delete</a></td>
+                    <td class="odd">{{ file.date }}</td>
+                    <td>{{ file.username }}</td>
+                    <td><a href="share/download/{{ file.fullname }}">Download</a></td>
+                    <td><a href="share/delete/{{ file.fullname }}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

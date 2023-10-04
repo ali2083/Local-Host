@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, render_template, request, redirect
+    Blueprint, render_template, request, redirect, session, flash
 )
 import psutil
 from . import db
@@ -12,50 +12,34 @@ def redirect_to_index():
 
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
-    # Iterate over all the keys in the dictionary
-    for interface in psutil.net_if_addrs():
-        # Check if the interface has a valid MAC address
-        if psutil.net_if_addrs()[interface][0].address:
-            # Print the MAC address for the interface
-            mac_address = psutil.net_if_addrs()[interface][0].address
-            mac_address = str(mac_address).replace('-','')
-            break
-
-
+    from . import db
     database = db.get_db()
-    username = ""
-    if request.method == 'post':
-        username = request.form['name']
-        print(username)
-        names = database.execute("SELECT username FROM users")
-        for name in names:
-            if name == username:
-                return render_template(
-                    'index.html',
-                    name = "",
-                    msg = "This name already been used",
-                    )
-        database.execute("UPDATE users SET (username) = (?) mac_address = (?)", (username, mac_address,))
 
+    if request.method == 'POST':
+        username =  request.form.get("name")
+        session['username'] = username
+        try:
+            data = database.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
+            if not data:
+                database.execute("INSERT INTO users (username) VALUES (?)", (username,))
+                database.commit()
+        except:
+            flash("inserting to database at start failed")
+            msg = "internal error 500"
+     
+    if 'username' in session:
+        username = session['username']
+        data = database.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
+        if  data and username:
+            username = str(data[0]) + " - " + username
+            msg = "you are logged in"
     else:
-        name = database.execute("SELECT username FROM users WHERE mac_address = (?)", (mac_address,))
-        if not name.fetchone():
-            username = mac_address
-            database.execute(
-                "INSERT INTO users (username, mac_address) VALUES (?, ?)",
-                (username,
-                mac_address,
-                ))
-            print("in rune")
-        else:
-            username = name.fetchone()[0]
-        return render_template(
-            'index.html',
-            name = username,
-            msg = "change your name:)"
-            )
-        
+        username = "username"
+        msg = "Please! Enter yourname"
+
     return render_template(
-        'index.html',
-        name = username,
-        )
+        "index.html",
+        name  = username,
+        msg = msg,
+                        )
+# Done

@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, render_template, request, redirect, session, flash
 )
-import psutil
+#import psutil
 from . import db
 
 bp = Blueprint('index', __name__)

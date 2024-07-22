@@ -46,6 +46,5 @@ def create_app(test_config=None):
 
     # from . import stream
     # app.register_blueprint(stream.bp)
-    # test git connections
     
     return app

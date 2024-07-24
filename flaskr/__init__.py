@@ -41,8 +41,8 @@ def create_app(test_config=None):
     from . import share
     app.register_blueprint(share.bp)
 
-    # from . import chatbot
-    # app.register_blueprint(chatbot.bp)
+    from . import chatbox
+    app.register_blueprint(chatbox.bp)
 
     # from . import stream
     # app.register_blueprint(stream.bp)

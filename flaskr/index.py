@@ -1,14 +1,16 @@
 from flask import (
     Blueprint, render_template, request, redirect, session, flash
 )
-#import psutil
+# import psutil
 from . import db
 
 bp = Blueprint('index', __name__)
 
+
 @bp.route('/')
 def redirect_to_index():
     return redirect('/index')
+
 
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
@@ -16,7 +18,7 @@ def index():
     database = db.get_db()
 
     if request.method == 'POST':
-        username =  request.form.get("name")
+        username = request.form.get("name")
         session['username'] = username
         try:
             data = database.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
@@ -26,11 +28,11 @@ def index():
         except:
             flash("inserting to database at start failed")
             msg = "internal error 500"
-     
+
     if 'username' in session:
         username = session['username']
         data = database.execute("SELECT id FROM users WHERE username = (?)", (username,)).fetchone()
-        if  data and username:
+        if data and username:
             username = str(data[0]) + " - " + username
             msg = "you are logged in"
     else:
@@ -39,7 +41,7 @@ def index():
 
     return render_template(
         "index.html",
-        name  = username,
-        msg = msg,
-                        )
+        name=username,
+        msg=msg,
+    )
 # Done

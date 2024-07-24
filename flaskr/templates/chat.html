@@ -1,1 +1,22 @@
-chat
+{% extends "base.html" %}
+{% block title %}Chat Box{% endblock %}
+{% block main %}
+    <div id="chat-box">
+    {% for chat in chats %}
+        <div class="chat-message">
+            <label>{{ chat.username }}</label>
+            {% if chat.massage_text[:4] == "http" %}
+                <a href="{{ chat.massage_text }}">{{ chat.massage_text }}</a>
+            {% else %}
+                <p>{{ chat.massage_text }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+
+        <form id="chat-form" method="post">
+            <input type="text" name="message" id="message-input" placeholder="Message">
+            <input type=submit id="submit-input" value="Send">
+        </form>
+<script src="static/script.js"></script>
+{% endblock %}

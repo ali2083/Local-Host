@@ -1,0 +1,7 @@
+flask
+opencv
+psutil
+pyautogui
+numpy
+pytest
+aiortc

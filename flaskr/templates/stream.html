@@ -1,1 +1,11 @@
-stream
+{% extends "base.html" %}
+{% block title %}Stream{% endblock %}
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block main %}
+    <video id="remoteVideo" autoplay></video>
+    <a class="link-box" href="{{ url_for('stream.video_feed') }}" target="_self">Link to Video Feed</a>
+    <a class="link-box" href="{{ url_for('stream.screen_feed') }}" target="_self">Link to screen Feed</a>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

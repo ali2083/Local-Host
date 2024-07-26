@@ -8,7 +8,7 @@ bp = Blueprint('chatbox', __name__)
 
 
 @bp.route('/chatbox', methods=['GET', 'POST'])
-def share():
+def chatbox():
     from . import db
     database = db.get_db()
     if 'username' in session:

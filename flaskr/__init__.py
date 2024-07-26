@@ -7,9 +7,10 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY = 'dev',
-        DATABASE = os.path.join(app.instance_path, 'database.sqlite'),
-        UPLOAD_FOLDER = os.path.join(app.instance_path, "files")
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'database.sqlite'),
+        UPLOAD_FOLDER=os.path.join(app.instance_path, "files"),
+        static_url_path='/static'
     )
 
     if test_config is None:
@@ -30,7 +31,6 @@ def create_app(test_config=None):
             os.makedirs(app.instance_path)
         except OSError:
             print("making instance folder failed")
-        
 
     from . import db
     db.init_app(app)
@@ -44,7 +44,7 @@ def create_app(test_config=None):
     from . import chatbox
     app.register_blueprint(chatbox.bp)
 
-    # from . import stream
-    # app.register_blueprint(stream.bp)
-    
+    from . import stream
+    app.register_blueprint(stream.bp)
+
     return app

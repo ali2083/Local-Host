@@ -18,5 +18,5 @@
             <input type="text" name="message" id="message-input" placeholder="Message">
             <input type=submit id="submit-input" value="Send">
         </form>
-<script src="static/script.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 import os
 import datetime
 from flask import (
-    Blueprint, render_template, request, flash, redirect, url_for, current_app, session
+    Blueprint, render_template, request, flash, redirect, url_for, current_app, session, send_file
 )
 from werkzeug.utils import secure_filename
 
@@ -15,9 +15,9 @@ def share():
     if 'username' in session:
         data = database.execute("SELECT id FROM users WHERE username = (?)", (session['username'],)).fetchone()
         if not data:
-            return redirect(url_for("index"))
+            return redirect(url_for("index.index"))
     else:
-        return redirect(url_for("index"))
+        return redirect(url_for("index.index"))
 
     if request.method == 'POST':
         # check if the post request has the file part
@@ -37,20 +37,20 @@ def share():
                 if filename == file_name:
                     flash("This file already exists")
                     return redirect(request.url)
-        try:
-            user_id = database.execute("SELECT id FROM users WHERE username = ?", (session['username'],)).fetchone()
-            if not user_id:
-                flash("login error")
-                return redirect("/index")
-            database.execute(
-                "INSERT INTO files (name, user_id, date) VALUES (?, ?, ?)",
-                (file.filename, user_id[0], datetime.datetime.now()),
-            )
-            database.commit()
-            file.save(os.path.join(folderpath, file.filename))
-        except:
-            flash("inserting files error")
-            return redirect(request.url)
+            try:
+                user_id = database.execute("SELECT id FROM users WHERE username = ?", (session['username'],)).fetchone()
+                if not user_id:
+                    flash("login error")
+                    return redirect("/index")
+                database.execute(
+                    "INSERT INTO files (name, user_id, date) VALUES (?, ?, ?)",
+                    (file.filename, user_id[0], datetime.datetime.now()),
+                )
+                database.commit()
+                file.save(os.path.join(folderpath, file.filename))
+            except:
+                flash("inserting files error")
+                return redirect(request.url)
 
     # -------======Models======--------
     files_data = database.execute("SELECT * FROM files JOIN users ON files.user_id = users.id").fetchall()
@@ -80,3 +80,29 @@ def share():
         return render_template("share.html", files=files)
 
     return render_template("share.html")
+
+
+@bp.route("/share/download/<filename>", methods=["GET"])
+def download_file(filename):
+    from . import db
+    database = db.get_db()
+
+    upload_folder = current_app.config["UPLOAD_FOLDER"]
+    isfile = database.execute('SELECT * FROM files WHERE name = ?', (filename,)).fetchone()
+    if isfile is not None:
+        return send_file(upload_folder + '\\' + filename, download_name=filename, as_attachment=True)
+
+
+@bp.route("/share/delete/<filename>", methods=["GET"])
+def delete_file(filename):
+    from . import db
+    database = db.get_db()
+    upload_folder = current_app.config["UPLOAD_FOLDER"]
+    isfile = database.execute('SELECT * FROM files WHERE name = ?', (filename,)).fetchone()
+    if isfile is not None:
+        database.execute("DELETE FROM files WHERE name = ?", (filename,))
+        database.commit()
+        os.remove(upload_folder + '\\' + filename)
+        flash("file {} deleted".format(filename))
+
+    return redirect(url_for("share.share"))

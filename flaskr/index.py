@@ -14,6 +14,7 @@ def redirect_to_index():
 
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
+    msg = ""
     from . import db
     database = db.get_db()
 

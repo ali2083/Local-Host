@@ -14,9 +14,9 @@ def chatbox():
     if 'username' in session:
         data = database.execute("SELECT id FROM users WHERE username = (?)", (session['username'],)).fetchone()
         if not data:
-            return redirect(url_for("index"))
+            return redirect(url_for("index.index"))
     else:
-        return redirect(url_for("index"))
+        return redirect(url_for("index.index"))
 
     if request.method == 'POST':
         message = request.form.get('message')
